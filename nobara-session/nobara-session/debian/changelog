@@ -1,3 +1,9 @@
+nobara-session (1.10-99nobara1) kinetic; urgency=low
+
+  * Replace profile.d safety mechnasim with init.d
+
+ -- Ward Nakchbandi <hotrod.master@hotmail.com>  Sat, 01 Oct 2022 14:50:00 +0200
+
 nobara-session (1.9-99nobara1) kinetic; urgency=low
 
   * Fix libunity in a more proper fashion
