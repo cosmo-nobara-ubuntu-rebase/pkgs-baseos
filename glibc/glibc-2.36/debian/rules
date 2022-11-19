@@ -275,6 +275,9 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 	mkdir -p $(debian-tmp)/etc/ld.so.conf.d
 	touch "$(debian-tmp)/etc/ld.so.conf.d/x86_64-linux-gnu.conf"
 	printf "# Multiarch support\n/usr/local/lib/x86_64-linux-gnu\n/lib/x86_64-linux-gnu\n/usr/lib/x86_64-linux-gnu" | tee "$(debian-tmp)/etc/ld.so.conf.d/x86_64-linux-gnu.conf" > /dev/null
+	mkdir -p "$(debian-tmp)/var/cache/ldconfig"
+	mkdir -p "$(debian-tmp)/lib64"
+	ln -sf /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 "$(debian-tmp)/lib64/ld-linux-x86-64.so.2" 
 	#
 	# libc6-i386:amd64
 	dh_auto_install --builddirectory=$(DEB_BUILDDIR_i386)
