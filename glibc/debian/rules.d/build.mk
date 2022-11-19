@@ -110,7 +110,6 @@ endif
 		--enable-stackguard-randomization \
 		--enable-stack-protector=strong \
 		--with-pkgversion="Ubuntu GLIBC $(DEB_VERSION)" \
-		--with-default-link=no \
 		--with-bugurl="https://bugs.launchpad.net/ubuntu/+source/glibc/+bugs" \
 		--with-default-link \
 		$(if $(filter $(pt_chown),yes),--enable-pt_chown) \
