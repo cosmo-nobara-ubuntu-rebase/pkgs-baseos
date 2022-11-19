@@ -10,14 +10,14 @@
 
 --- a/nss/nss_files/files-parse.c
 +++ b/nss/nss_files/files-parse.c
-@@ -22,6 +22,7 @@
+@@ -21,6 +21,7 @@
+ #include <string.h>
  #include <stdlib.h>
  #include <stdint.h>
- #include <nss_files.h>
 +#include <limits.h>
+ #include <nss_files.h>
  
  /* These symbols are defined by the including source file:
- 
 @@ -162,7 +163,12 @@
  # define INT_FIELD(variable, terminator_p, swallow, base, convert)	      \
    {									      \

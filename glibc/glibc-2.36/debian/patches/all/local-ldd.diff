@@ -9,7 +9,7 @@
 
 --- a/elf/ldd.bash.in
 +++ b/elf/ldd.bash.in
-@@ -150,17 +150,18 @@
+@@ -151,17 +152,18 @@
      echo "ldd: ${file}:" $"not regular file" >&2
      result=1
    elif test -r "$file"; then
@@ -24,7 +24,7 @@
 -	case $ret in
 -	[02]) RTLD=${rtld}; break;;
 -	esac
-+	dummy=`$rtld --help > /dev/null 2>&1` 
++	dummy=`$rtld --version 2>&1`
 +	if test $? = 0; then
 +	  verify_out=`${rtld} --verify "$file"`
 +	  ret=$?

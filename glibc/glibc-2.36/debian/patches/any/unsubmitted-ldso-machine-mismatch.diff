@@ -1,6 +1,10 @@
+---
+ elf/dl-load.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
+
 --- a/elf/dl-load.c
 +++ b/elf/dl-load.c
-@@ -1707,6 +1707,14 @@
+@@ -1717,6 +1717,14 @@
  	      return -1;
  	    }
  #endif

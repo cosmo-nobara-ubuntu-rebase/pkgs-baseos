@@ -1,6 +1,8 @@
+diff --git a/elf/ldconfig.c b/elf/ldconfig.c
+index 4211f4c..6425f8e 100644
 --- a/elf/ldconfig.c
 +++ b/elf/ldconfig.c
-@@ -573,6 +573,25 @@
+@@ -450,6 +450,25 @@ chroot_stat (const char *real_path, const char *path, struct stat64 *st)
    return ret;
  }
  
@@ -26,7 +28,7 @@
  /* Create a symbolic link from soname to libname in directory path.  */
  static void
  create_links (const char *real_path, const char *path, const char *libname,
-@@ -583,6 +602,7 @@
+@@ -460,6 +477,7 @@ create_links (const char *real_path, const char *path, const char *libname,
    struct stat stat_lib, stat_so, lstat_so;
    int do_link = 1;
    int do_remove = 1;
@@ -34,7 +36,7 @@
    /* XXX: The logics in this function should be simplified.  */
  
    /* Get complete path.  */
-@@ -611,6 +631,18 @@
+@@ -488,6 +506,18 @@ create_links (const char *real_path, const char *path, const char *libname,
  	  error (0, 0, _("Can't stat %s\n"), full_libname);
  	  return;
  	}

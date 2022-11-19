@@ -4,7 +4,7 @@
 	NULL pointers.
 
 ---
- nptl/pthreadP.h |    4 ++--
+ sysdeps/nptl/pthreadP.h |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 --- a/sysdeps/nptl/pthreadP.h

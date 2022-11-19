@@ -35,7 +35,7 @@ I cannot really think of anything better than
  }
  
  static inline void
-@@ -350,7 +350,7 @@
+@@ -355,7 +355,7 @@
    unsigned long int addr = dense_port_to_cpu_addr (port);
    unsigned char r;
  
@@ -44,7 +44,7 @@ I cannot really think of anything better than
    return r;
  }
  
-@@ -360,7 +360,7 @@
+@@ -365,7 +365,7 @@
    unsigned long int addr = dense_port_to_cpu_addr (port);
    unsigned short r;
  

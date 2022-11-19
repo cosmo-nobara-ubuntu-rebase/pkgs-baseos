@@ -7,7 +7,7 @@ architecture dependent.
 
 --- a/nss/Makefile
 +++ b/nss/Makefile
-@@ -85,7 +85,7 @@
+@@ -61,7 +61,7 @@
  endif
  
  # Specify rules for the nss_* modules.  We have some services.

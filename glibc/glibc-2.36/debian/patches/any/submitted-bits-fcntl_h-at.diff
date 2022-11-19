@@ -101,7 +101,7 @@
 +#endif
 --- a/sysdeps/unix/sysv/linux/bits/fcntl-linux.h
 +++ b/sysdeps/unix/sysv/linux/bits/fcntl-linux.h
-@@ -367,6 +367,29 @@
+@@ -366,6 +366,29 @@
  # define MAX_HANDLE_SZ	128
  #endif
  

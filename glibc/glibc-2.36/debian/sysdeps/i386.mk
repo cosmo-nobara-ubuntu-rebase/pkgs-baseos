@@ -1,6 +1,7 @@
 # configuration options for all flavours
-extra_config_options = --enable-multi-arch --enable-static-pie --enable-cet
-libc_extra_cflags = -mno-tls-direct-seg-refs
+extra_config_options = --enable-multi-arch
+CC = $(DEB_HOST_GNU_TYPE)-$(BASE_CC)$(DEB_GCC_VERSION) -Wl,--hash-style=both
+CXX = $(DEB_HOST_GNU_TYPE)-$(BASE_CXX)$(DEB_GCC_VERSION) -Wl,--hash-style=both
 
 # multilib flavours
 ifeq (,$(filter nobiarch, $(DEB_BUILD_PROFILES)))
@@ -21,7 +22,7 @@ amd64_libdir = /usr/lib64
 
 define amd64_extra_install
 cp debian/tmp-amd64/usr/bin/ldd \
-	debian/tmp-libc/usr/bin
+	debian/tmp/usr/bin
 endef
 
 define libc6-dev-amd64_extra_pkg_install
