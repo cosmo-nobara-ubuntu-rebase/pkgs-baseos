@@ -1,0 +1,236 @@
+upstream-updates/0001-stdlib-Suppress-gcc-diagnostic-that-char8_t-is-a-key.patch
+upstream-updates/0002-dlfcn-Pass-caller-pointer-to-static-dlopen-implement.patch
+upstream-updates/0003-Update-syscall-lists-for-Linux-5.19.patch
+upstream-updates/0004-Linux-Terminate-subprocess-on-late-failure-in-tst-pi.patch
+upstream-updates/0005-alpha-Fix-generic-brk-system-call-emulation-in-__brk.patch
+upstream-updates/0006-socket-Check-lengths-before-advancing-pointer-in-CMS.patch
+upstream-updates/0007-NEWS-Add-entry-for-bug-28846.patch
+upstream-updates/0008-01-glibcextract.py-Add-compile_c_snippet.patch
+upstream-updates/0008-02-linux-Use-compile_c_snippet-to-check-linux-pidfd.h-a.patch
+upstream-updates/0008-03-linux-Mimic-kernel-defition-for-BLOCK_SIZE.patch
+upstream-updates/0008-04-linux-Use-compile_c_snippet-to-check-linux-mount.h-a.patch
+upstream-updates/0008-05-linux-Fix-sys-mount.h-usage-with-kernel-headers.patch
+upstream-updates/0008-06-Linux-Fix-enum-fsconfig_command-detection-in-sys-mou.patch
+upstream-updates/0009-syslog-Fix-large-messages-BZ-29536.patch
+upstream-updates/0010-elf-Call-__libc_early_init-for-reused-namespaces-bug.patch
+upstream-updates/0011-Apply-asm-redirections-in-wchar.h-before-first-use.patch
+upstream-updates/0012-elf-Restore-how-vDSO-dependency-is-printed-with-LD_T.patch
+upstream-updates/0013-syslog-Remove-extra-whitespace-between-timestamp-and.patch
+upstream-updates/0014-Add-NEWS-entry-for-CVE-2022-39046.patch
+upstream-updates/0015-nscd-Fix-netlink-cache-invalidation-if-epoll-is-used.patch
+upstream-updates/0016-01-resolv-Add-tst-resolv-byaddr-for-testing-reverse-loo.patch
+upstream-updates/0016-02-resolv-Add-tst-resolv-aliases.patch
+upstream-updates/0016-03-resolv-Add-internal-__res_binary_hnok-function.patch
+upstream-updates/0016-04-resolv-Add-the-__ns_samebinaryname-function.patch
+upstream-updates/0016-05-resolv-Add-internal-__ns_name_length_uncompressed-fu.patch
+upstream-updates/0016-06-resolv-Add-DNS-packet-parsing-helpers-geared-towards.patch
+upstream-updates/0016-07-nss_dns-Split-getanswer_ptr-from-getanswer_r.patch
+upstream-updates/0016-08-nss_dns-Rewrite-_nss_dns_gethostbyaddr2_r-and-getans.patch
+upstream-updates/0016-09-nss_dns-Remove-remnants-of-IPv6-address-mapping.patch
+upstream-updates/0016-10-nss_dns-Rewrite-getanswer_r-to-match-getanswer_ptr-b.patch
+upstream-updates/0016-11-nss_dns-In-gaih_getanswer_slice-skip-strange-aliases.patch
+upstream-updates/0016-12-resolv-Add-new-tst-resolv-invalid-cname.patch
+upstream-updates/0016-13-nss_dns-Rewrite-_nss_dns_gethostbyname4_r-using-curr.patch
+upstream-updates/0016-14-resolv-Fix-building-tst-resolv-invalid-cname-for-ear.patch
+upstream-updates/0017-NEWS-Note-bug-12154-and-bug-29305-as-fixed.patch
+upstream-updates/0018-elf-Run-tst-audit-tlsdesc-tst-audit-tlsdesc-dlopen-e.patch
+upstream-updates/0019-elf-Fix-hwcaps-string-size-overestimation.patch
+upstream-updates/0020-01-scripts-dso-ordering-test.py-Generate-program-run-ti.patch
+upstream-updates/0020-02-elf-Rename-_dl_sort_maps-parameter-from-skip-to-forc.patch
+upstream-updates/0021-elf-Implement-force_first-handling-in-_dl_sort_maps_.patch
+upstream-updates/0022-gconv-Use-64-bit-interfaces-in-gconv_parseconfdir-bu.patch
+upstream-updates/0023-01-x86-include-BMI1-and-BMI2-in-x86-64-v3-level.patch
+upstream-updates/0023-02-x86-64-Require-BMI2-for-AVX2-str-n-casecmp-implement.patch
+upstream-updates/0023-03-x86-64-Require-BMI2-for-AVX2-strcmp-implementation.patch
+upstream-updates/0023-04-x86-64-Require-BMI2-for-AVX2-strncmp-implementation.patch
+upstream-updates/0023-05-x86-64-Require-BMI2-for-AVX2-wcs-n-cmp-implementatio.patch
+upstream-updates/0023-06-x86-64-Require-BMI2-for-AVX2-raw-w-memchr-implementa.patch
+upstream-updates/0023-07-x86-64-Require-BMI2-and-LZCNT-for-AVX2-memrchr-imple.patch
+upstream-updates/0023-08-x86-64-Require-BMI1-BMI2-for-AVX2-strrchr-and-wcsrch.patch
+upstream-updates/0024-nscd-Drop-local-address-tuple-variable-BZ-29607.patch
+upstream-updates/0025-get_nscd_addresses-Fix-subscript-typos-BZ-29605.patch
+upstream-updates/0026-stdlib-Fix-__getrandom_nocancel-type-and-arc4random-.patch
+
+locale/check-unknown-symbols.diff
+locale/locale-print-LANGUAGE.diff
+locale/LC_IDENTIFICATION-optional-fields.diff
+localedata/sort-UTF8-first.diff
+localedata/supported.diff
+localedata/locale-eu_FR.diff
+localedata/locale-ku_TR.diff
+localedata/fo_FO-date_fmt.diff
+localedata/locales-fr.diff
+localedata/locale-en_DK.diff
+localedata/locale-zh_TW.diff
+localedata/tailor-iso14651_t1.diff
+localedata/submitted-es_MX-decimal_point.diff
+
+alpha/local-gcc4.1.diff
+alpha/submitted-dl-support.diff
+# alpha/local-string-functions.diff
+alpha/submitted-fts64.diff
+alpha/submitted-makecontext.diff
+
+arm/local-sigaction.diff
+arm/unsubmitted-ldconfig-cache-abi.diff
+arm/local-soname-hack.diff
+arm/local-vfp-sysdeps.diff
+arm/unsubmitted-ldso-multilib.diff
+arm/local-arm-futex.diff
+
+hppa/local-inlining.diff
+
+# hurd-i386/git-posix_openpt.diff
+# hurd-i386/local-enable-ldconfig.diff
+# hurd-i386/tg-sysvshm.diff
+# hurd-i386/tg-thread-cancel.diff
+# hurd-i386/tg-bigmem.diff
+# hurd-i386/local-disable-ioctls.diff
+# hurd-i386/tg-sendmsg-SCM_CREDS.diff
+# hurd-i386/tg-mach-hurd-link.diff
+# hurd-i386/local-ED.diff
+# hurd-i386/local-madvise_warn.diff
+# hurd-i386/git-hurdsig-SA_SIGINFO.diff
+# hurd-i386/tg-hooks.diff
+# hurd-i386/local-usr.diff
+# hurd-i386/git-sbrk-end.diff
+# hurd-i386/tg-ifaddrs_v6.diff
+# hurd-i386/tg-EIEIO-fr.diff
+# hurd-i386/tg-EGREGIOUS-fr.diff
+# hurd-i386/unsubmitted-clock_t_centiseconds.diff
+# hurd-i386/submitted-path_mounted.diff
+# hurd-i386/git-sigstate_thread_reference.diff
+# hurd-i386/submitted-bind_umask2.diff
+# hurd-i386/tg-bootstrap.diff
+# hurd-i386/local-mach_print.diff
+# hurd-i386/tg-eintr.diff
+# hurd-i386/tg-libc_rwlock_recursive.diff
+# hurd-i386/local-no_unsupported_ioctls.diff
+# hurd-i386/local-exec_filename.diff
+# hurd-i386/git-fork-pthread_exit.diff
+# hurd-i386/git-spin_lock.diff
+# hurd-i386/git-barrier-1.diff
+# hurd-i386/git-sem-intr.diff
+# hurd-i386/git-register-atfork.diff
+# hurd-i386/git-register-atfork2.diff
+# hurd-i386/git-pthread_self.diff
+# hurd-i386/git-trunc-times.diff
+# hurd-i386/git-ss_init.diff
+# hurd-i386/git-tst-udp.diff
+# hurd-i386/git-pselect.diff
+# hurd-i386/git-fexecve.diff
+# hurd-i386/git-cond_destroy.diff
+# hurd-i386/git-holes.diff
+# hurd-i386/git-longjmp-onstack.diff
+# hurd-i386/git-intr-msg-unwind.diff
+# hurd-i386/git-strtol-test.diff
+# hurd-i386/local-tls-ie-align.diff
+# hurd-i386/git-fix-longjmp.diff
+# hurd-i386/git-sched_sets.diff
+# hurd-i386/git-pthread_atfork-hidden.diff
+# hurd-i386/git-bsd4.3-ioctls.diff
+# hurd-i386/git-clock-cputime.diff
+# hurd-i386/git-raise.diff
+# hurd-i386/git-WAIT.diff
+# hurd-i386/git-pthread_link_tests.diff
+# hurd-i386/git-libpthread_syms.diff
+# hurd-i386/git-libpthread-nodelete.diff
+# hurd-i386/git-cthreads.diff
+# hurd-i386/git-cthreads-symbols.diff
+# hurd-i386/git-libpthread_plt.diff
+# hurd-i386/git-lll-initializer.diff
+# hurd-i386/sysvshm-lll.diff
+# hurd-i386/git-lll-ptr.diff
+# hurd-i386/git-ld-library-path-checks.diff
+# hurd-i386/git-lll-wait-intr.diff
+# hurd-i386/git-lll-private.diff
+# hurd-i386/git-futex-internal.diff
+# hurd-i386/git-libc-open.diff
+# hurd-i386/git-pthread_get_cleanup_stack.diff
+# hurd-i386/git-libpthread-testcancel.diff
+# hurd-i386/git-SEM_VALUE_MAX.diff
+# hurd-i386/git-sem-pshared.diff
+# hurd-i386/git-sem-open-init.diff
+# hurd-i386/git-sem-open.diff
+# hurd-i386/git-siginfo_uesp.diff
+# hurd-i386/git-mmap-EINVAL.diff
+# hurd-i386/git-waitid.diff
+# hurd-i386/git-hurd-version.diff
+# hurd-i386/git-mmap_addr.diff
+# hurd-i386/git-tiocflush.diff
+
+i386/local-biarch.diff
+i386/unsubmitted-quiet-ldconfig.diff
+
+riscv64/local-asin-acos-raise-invalid.diff
+
+# kfreebsd/submitted-waitid.diff
+# kfreebsd/submitted-auxv.diff
+kfreebsd/local-config_h_in.patch
+kfreebsd/local-grantpt.diff
+kfreebsd/local-sysdeps.diff
+kfreebsd/local-fbtl.diff
+kfreebsd/local-fbtl-depends.diff
+kfreebsd/local-scripts.diff
+kfreebsd/local-getaddrinfo-freebsd-kernel.diff
+kfreebsd/local-no-execfn.diff
+
+m68k/local-dwarf2-buildfix.diff
+m68k/local-reloc.diff
+m68k/submitted-gcc34-seccomment.diff
+
+mips/submitted-rld_map.diff
+
+#powerpc/local-powerpc8xx-dcbz.diff
+
+sh4/local-fpscr_values.diff
+
+all/local-alias-et_EE.diff
+all/local-remove-manual.diff
+all/local-ru_RU.diff
+all/local-ldd.diff
+
+any/local-asserth-decls.diff
+any/local-bindresvport_blacklist.diff
+any/local-fhs-linux-paths.diff
+any/local-fhs-nscd.diff
+any/local-ld-multiarch.diff
+any/local-ldso-disable-hwcap.diff
+any/local-nss-upgrade.diff
+any/local-stubs_h.diff
+any/local-tcsetaddr.diff
+any/local-nss-overflow.diff
+any/submitted-missing-etc-hosts.diff
+any/submitted-bits-fcntl_h-at.diff
+any/submitted-nptl-invalid-td.patch
+any/local-ldconfig-multiarch.diff
+any/local-disable-libnss-db.diff
+any/local-revert-bz13979.diff
+any/unsubmitted-ldso-machine-mismatch.diff
+any/local-ldconfig-ignore-ld.so.diff
+any/local-bootstrap-headers.diff
+any/local-test-install.diff
+
+# Ubuntu patches live in their own little world, to maintain sanity
+ubuntu/local-altlocaledir.diff
+ubuntu/local-disable-ld_audit.diff
+ubuntu/local-disable-nscd-netgroup-caching.diff
+ubuntu/submitted-no-sprintf-pre-truncate.diff
+ubuntu/localedata/en_IE-am_pm.diff
+ubuntu/localedata/eo_US.diff
+ubuntu/localedata/es_DO-am_pm.diff
+ubuntu/localedata/lv_LV-currency.diff
+ubuntu/localedata/sd_PK.diff
+ubuntu/localedata/ug_CN@latin.diff
+ubuntu/local-pldd-root.diff
+ubuntu/local-fallback-to-monotonic.diff
+ubuntu/submitted-broadcast-to-prevent-deadlock.diff
+ubuntu/sdt-headers.patch
+0001-Ensure-calculations-happen-with-desired-rounding-mod.patch
+0001-Avoid-undefined-behaviour-in-ibm128-implementation-o.patch
+0001-Fix-BZ-29463-in-the-ibm128-implementation-of-y1l-too.patch
+restore-libc-DT_HASH.patch
+
+# Nobara Patches
+#nobara/rogue_company_reverts.patch
+nobara/disable-clone3.diff

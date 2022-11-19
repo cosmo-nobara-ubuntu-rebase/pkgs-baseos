@@ -1,0 +1,40 @@
+From 2b274fd8c9c776cf70fcdb8356e678ada522a7b0 Mon Sep 17 00:00:00 2001
+From: Michael Hudson-Doyle <michael.hudson@canonical.com>
+Date: Fri, 12 Aug 2022 11:29:31 +1200
+Subject: [PATCH] Ensure calculations happen with desired rounding mode in
+ y1lf128
+
+math/test-float128-y1 fails on x86_64 and ppc64el with gcc 12 and -O3,
+because code inside a block guarded by SET_RESTORE_ROUNDL is being moved
+after the rounding mode has been restored. Use math_force_eval to
+prevent this (and insert some math_opt_barrier calls to prevent code
+from being moved before the rounding mode is set).
+
+Fixes #29463
+
+Reviewed-By: Wilco Dijkstra <Wilco.Dijkstra@arm.com>
+---
+ sysdeps/ieee754/ldbl-128/e_j1l.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/sysdeps/ieee754/ldbl-128/e_j1l.c b/sysdeps/ieee754/ldbl-128/e_j1l.c
+index 54c457681a..9a9c5c6f00 100644
+--- a/sysdeps/ieee754/ldbl-128/e_j1l.c
++++ b/sysdeps/ieee754/ldbl-128/e_j1l.c
+@@ -869,10 +869,13 @@ __ieee754_y1l (_Float128 x)
+     {
+       /* 0 <= x <= 2 */
+       SET_RESTORE_ROUNDL (FE_TONEAREST);
++      xx = math_opt_barrier (xx);
++      x = math_opt_barrier (x);
+       z = xx * xx;
+       p = xx * neval (z, Y0_2N, NY0_2N) / deval (z, Y0_2D, NY0_2D);
+       p = -TWOOPI / xx + p;
+       p = TWOOPI * __ieee754_logl (x) * __ieee754_j1l (x) + p;
++      math_force_eval (p);
+       return p;
+     }
+ 
+-- 
+2.34.1
+
