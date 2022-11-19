@@ -259,7 +259,7 @@ override_dh_auto_build:
 #		$(if $(filter $(pt_chown),yes),--enable-pt_chown) \
 #		$(if $(filter $(threads),no),--disable-nscd) \
 #		$(if $(filter $(mvec),no),--disable-mathvec) \
-		$(with_headers) $(extra_config_options)
+#		$(with_headers) $(extra_config_options)
 #	@echo Building $(curpass)-x32:amd64
 #	$(MAKE) cross-compiling=yes -C $(DEB_BUILDDIR_x32) $(NJOBS) install_root=$(CURDIR)/$(debian-tmp-x32)  install-bootstrap-headers=yes install-headers
 #	echo "---------------"
