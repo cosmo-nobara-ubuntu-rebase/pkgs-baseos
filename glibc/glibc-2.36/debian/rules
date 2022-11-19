@@ -143,45 +143,45 @@ override_dh_auto_configure:
 	cp -rf $(DEB_BUILDDIR) $(DEB_BUILDDIR_x32)
 	cp -rf $(DEB_BUILDDIR) $(DEB_BUILDDIR_amd64)
 override_dh_auto_build:
-#	### libc6:$(DEB_HOST_ARCH)
-#	### Add configparms override
-#	echo "libdir = $(libdir)"         >> $(DEB_BUILDDIR)/configparms
-#	echo "slibdir = $(slibdir)"       >> $(DEB_BUILDDIR)/configparms
-#	echo "install_root = $(CURDIR)/$(debian-tmp)" >> $(DEB_BUILDDIR)/configparms
-#	echo "LIBGD = yes"                        >> $(DEB_BUILDDIR)/configparms
-#	#
-#	echo -n "Build started: " ; date --rfc-2822; \
-#	echo "---------------"; \
-#	cd $(DEB_BUILDDIR) && \
-#		#CC="$(CC)" \
-#		CXX="$(CXX)" \
-#		MIG="$(MIG)" \
-#		BUILD_CC="$(BUILD_CC)" \
-#		BUILD_CXX="$(BUILD_CXX)" \
-#		CFLAGS="$(HOST_CFLAGS)" \
-#		ASFLAGS="$(HOST_CFLAGS)" \
-#		BUILD_CFLAGS="$(BUILD_CFLAGS)" \
-#		AUTOCONF=false \
-#		MAKEINFO=: \
-#		$(CURDIR)/configure \
-#		--prefix=/usr \
-#		--enable-add-ons=$(standard-add-ons)"$(add-ons)" \
-#		--without-selinux \
-#		--disable-crypt \
-#		--enable-stackguard-randomization \
-#		--enable-stack-protector=strong \
-#		--with-pkgversion="Debian GLIBC $(DEB_VERSION)" \
-#		--with-bugurl="http://www.debian.org/Bugs/" \
-#		--with-timeoutfactor="$(TIMEOUTFACTOR)" \
-#		$(if $(filter $(pt_chown),yes),--enable-pt_chown) \
-#		$(if $(filter $(threads),no),--disable-nscd) \
-#		$(if $(filter $(mvec),no),--disable-mathvec) \
-#		$(with_headers) $(extra_config_options)
-#	@echo Building $(curpass):amd64
-#	$(MAKE) -C $(DEB_BUILDDIR) $(NJOBS)
-#	echo "---------------"
-#	echo -n "Build ended: " ; date --rfc-2822
-#	cd ../../
+	### libc6:$(DEB_HOST_ARCH)
+	### Add configparms override
+	echo "libdir = $(libdir)"         >> $(DEB_BUILDDIR)/configparms
+	echo "slibdir = $(slibdir)"       >> $(DEB_BUILDDIR)/configparms
+	echo "install_root = $(CURDIR)/$(debian-tmp)" >> $(DEB_BUILDDIR)/configparms
+	echo "LIBGD = yes"                        >> $(DEB_BUILDDIR)/configparms
+	#
+	echo -n "Build started: " ; date --rfc-2822; \
+	echo "---------------"; \
+	cd $(DEB_BUILDDIR) && \
+		CC="$(CC)" \
+		CXX="$(CXX)" \
+		MIG="$(MIG)" \
+		BUILD_CC="$(BUILD_CC)" \
+		BUILD_CXX="$(BUILD_CXX)" \
+		CFLAGS="$(HOST_CFLAGS)" \
+		ASFLAGS="$(HOST_CFLAGS)" \
+		BUILD_CFLAGS="$(BUILD_CFLAGS)" \
+		AUTOCONF=false \
+		MAKEINFO=: \
+		$(CURDIR)/configure \
+		--prefix=/usr \
+		--enable-add-ons=$(standard-add-ons)"$(add-ons)" \
+		--without-selinux \
+		--disable-crypt \
+		--enable-stackguard-randomization \
+		--enable-stack-protector=strong \
+		--with-pkgversion="Debian GLIBC $(DEB_VERSION)" \
+		--with-bugurl="http://www.debian.org/Bugs/" \
+		--with-timeoutfactor="$(TIMEOUTFACTOR)" \
+		$(if $(filter $(pt_chown),yes),--enable-pt_chown) \
+		$(if $(filter $(threads),no),--disable-nscd) \
+		$(if $(filter $(mvec),no),--disable-mathvec) \
+		$(with_headers) $(extra_config_options)
+	@echo Building $(curpass):amd64
+	$(MAKE) -C $(DEB_BUILDDIR) $(NJOBS)
+	echo "---------------"
+	echo -n "Build ended: " ; date --rfc-2822
+	cd ../../
 	### libc6-i386:amd64
 	### Add configparms override
 	echo "libdir = /usr/lib32"         >> $(DEB_BUILDDIR_i386)/configparms
@@ -223,19 +223,65 @@ override_dh_auto_build:
 	echo "---------------"
 	echo -n "Build ended: " ; date --rfc-2822
 	cd ../../
-	
+	echo -n "x32 build deprecated in ubuntu 22.10: not building" ; date --rfc-2822
+#	### libc6-x32:amd64
+#	### Add configparms override
+#	echo "libdir = /usr/libx32"         >> $(DEB_BUILDDIR_x32)/configparms
+#	echo "slibdir = /libx32"       >> $(DEB_BUILDDIR_x32)/configparms
+#	echo "LIBGD = no"                        >> $(DEB_BUILDDIR_x32)/configparms
+#	echo "build-programs=yes" >> $(DEB_BUILDDIR_x32)/configparms
+#	echo "install_root = $(CURDIR)/$(debian-tmp-x32)" >> $(DEB_BUILDDIR_x32)/configparms
+#	#
+#	echo -n "Build started: " ; date --rfc-2822; \
+#	echo "---------------"; \
+#	cd $(DEB_BUILDDIR_x32) && \
+#		CC="$(CC) -mx32" \
+#		CXX="$(CXX) -mx32" \
+#		MIG="$(MIG)" \
+#		BUILD_CC="$(BUILD_CC) -mx32" \
+#		BUILD_CXX="$(BUILD_CXX) -mx32" \
+#		CFLAGS="$(HOST_CFLAGS)  -mx32" \
+#		ASFLAGS="$(HOST_CFLAGS)  -mx32" \
+#		BUILD_CFLAGS="$(BUILD_CFLAGS)  -mx32" \
+#		AUTOCONF=false \
+#		MAKEINFO=: \
+#		$(CURDIR)/configure \
+#		--build=x86_64-x32-linux \
+#		--prefix=/usr \
+#		--enable-add-ons=$(standard-add-ons)"$(add-ons)" \
+#		--without-selinux \
+#		--disable-crypt \
+#		--enable-stackguard-randomization \
+#		--enable-stack-protector=strong \
+#		--with-pkgversion="Debian GLIBC $(DEB_VERSION)" \
+#		--with-bugurl="http://www.debian.org/Bugs/" \
+#		--with-timeoutfactor="$(TIMEOUTFACTOR)" \
+#		$(if $(filter $(pt_chown),yes),--enable-pt_chown) \
+#		$(if $(filter $(threads),no),--disable-nscd) \
+#		$(if $(filter $(mvec),no),--disable-mathvec) \
+		$(with_headers) $(extra_config_options)
+#	@echo Building $(curpass)-x32:amd64
+#	$(MAKE) cross-compiling=yes -C $(DEB_BUILDDIR_x32) $(NJOBS) install_root=$(CURDIR)/$(debian-tmp-x32)  install-bootstrap-headers=yes install-headers
+#	echo "---------------"
+#	echo -n "Build ended: " ; date --rfc-2822
+#	cd ../../
 override_dh_auto_install:
-	### libc6:$(DEB_HOST_ARCH)
-	#dh_auto_install --builddirectory=$(DEB_BUILDDIR)
+	# libc6:$(DEB_HOST_ARCH)
+	dh_auto_install --builddirectory=$(DEB_BUILDDIR)
+	cp -r debian/local/usr_amd64/usr $(debian-tmp)/
+	mkdir -p $(debian-tmp)/etc/ld.so.conf.d
+	touch "$(debian-tmp)/etc/ld.so.conf.d/x86_64-linux-gnu.conf"
+	printf "# Multiarch support\n/usr/local/lib/x86_64-linux-gnu\n/lib/x86_64-linux-gnu\n/usr/lib/x86_64-linux-gnu" | tee "$(debian-tmp)/etc/ld.so.conf.d/x86_64-linux-gnu.conf" > /dev/null
 	#
-	### libc6-i386:amd64
+	# libc6-i386:amd64
 	dh_auto_install --builddirectory=$(DEB_BUILDDIR_i386)
-	cp -r debian/local/usr $(debian-tmp-i386)/
+	cp -r debian/local/usr_lib32/usr $(debian-tmp-i386)/
 	rm -r $(debian-tmp-i386)/etc/ld.so.cache
 	mkdir -p $(debian-tmp-i386)/etc/ld.so.conf.d
 	touch "$(debian-tmp-i386)/etc/ld.so.conf.d/zz_i386-biarch-compat.conf"
 	printf "# Legacy biarch compatibility support\n/lib32\n/usr/lib32" | tee "$(debian-tmp-i386)/etc/ld.so.conf.d/zz_i386-biarch-compat.conf" > /dev/null
-	
+	## libc6-x32:amd64
+	#dh_auto_install --builddirectory=$(DEB_BUILDDIR_x32)
 
 
 
