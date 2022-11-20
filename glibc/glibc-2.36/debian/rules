@@ -189,6 +189,7 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 		--with-pkgversion="Debian GLIBC $(DEB_VERSION)" \
 		--with-bugurl="http://www.debian.org/Bugs/" \
 		--with-timeoutfactor="$(TIMEOUTFACTOR)" \
+		--enable-pt_chown \
 		$(with_headers) $(extra_config_options)
 	@echo Building $(curpass):amd64
 	$(MAKE) -C $(DEB_BUILDDIR) $(NJOBS)
