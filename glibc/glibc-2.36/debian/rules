@@ -55,7 +55,7 @@ BUILD_CC = $(DEB_BUILD_GNU_TYPE)-$(BASE_CC)
 BUILD_CXX = $(DEB_BUILD_GNU_TYPE)-$(BASE_CXX)
 BUILD_CFLAGS = -O2 -g -fdebug-prefix-map=$(CURDIR)=.
 BUILD_MIG = $(DEB_BUILD_GNU_TYPE)-$(BASE_MIG)
-HOST_CFLAGS = -pipe -O2 -g -fdebug-prefix-map=$(CURDIR)=. $(call xx,extra_cflags)
+HOST_CFLAGS = -pipe -O2 -g -fdebug-prefix-map=$(CURDIR)=. $(extra_cflags)
 BASE_CC = gcc
 BASE_CXX = g++
 BASE_MIG = mig
@@ -159,9 +159,9 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 		MIG="$(MIG)" \
 		BUILD_CC="$(BUILD_CC)" \
 		BUILD_CXX="$(BUILD_CXX)" \
-		CFLAGS="$(HOST_CFLAGS)" \
-		ASFLAGS="$(HOST_CFLAGS)" \
-		BUILD_CFLAGS="$(BUILD_CFLAGS)" \
+		CFLAGS="$(HOST_CFLAGS) -lm" \
+		ASFLAGS="$(HOST_CFLAGS) -lm" \
+		BUILD_CFLAGS="$(BUILD_CFLAGS) -lm" \
 		AUTOCONF=false \
 		MAKEINFO=: \
 		$(CURDIR)/configure \
@@ -174,9 +174,6 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 		--with-pkgversion="Debian GLIBC $(DEB_VERSION)" \
 		--with-bugurl="http://www.debian.org/Bugs/" \
 		--with-timeoutfactor="$(TIMEOUTFACTOR)" \
-		$(if $(filter $(pt_chown),yes),--enable-pt_chown) \
-		$(if $(filter $(threads),no),--disable-nscd) \
-		$(if $(filter $(mvec),no),--disable-mathvec) \
 		$(with_headers) $(extra_config_options)
 	@echo Building $(curpass):amd64
 	$(MAKE) -C $(DEB_BUILDDIR) $(NJOBS)
@@ -215,9 +212,6 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 		--with-pkgversion="Debian GLIBC $(DEB_VERSION)" \
 		--with-bugurl="http://www.debian.org/Bugs/" \
 		--with-timeoutfactor="$(TIMEOUTFACTOR)" \
-		$(if $(filter $(pt_chown),yes),--enable-pt_chown) \
-		$(if $(filter $(threads),no),--disable-nscd) \
-		$(if $(filter $(mvec),no),--disable-mathvec) \
 		$(with_headers) $(extra_config_options)
 	@echo Building $(curpass)-i386:amd64
 	$(MAKE) cross-compiling=yes -C $(DEB_BUILDDIR_i386) $(NJOBS) install_root=$(CURDIR)/$(debian-tmp-i386)  install-bootstrap-headers=yes install-headers
@@ -257,9 +251,6 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 #		--with-pkgversion="Debian GLIBC $(DEB_VERSION)" \
 #		--with-bugurl="http://www.debian.org/Bugs/" \
 #		--with-timeoutfactor="$(TIMEOUTFACTOR)" \
-#		$(if $(filter $(pt_chown),yes),--enable-pt_chown) \
-#		$(if $(filter $(threads),no),--disable-nscd) \
-#		$(if $(filter $(mvec),no),--disable-mathvec) \
 #		$(with_headers) $(extra_config_options)
 #	@echo Building $(curpass)-x32:amd64
 #	$(MAKE) cross-compiling=yes -C $(DEB_BUILDDIR_x32) $(NJOBS) install_root=$(CURDIR)/$(debian-tmp-x32)  install-bootstrap-headers=yes install-headers
@@ -269,27 +260,100 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 endif
 override_dh_auto_install:
 ifeq (amd64,$(DEB_HOST_ARCH))
-	# libc6:$(DEB_HOST_ARCH)
+# libc6:$(DEB_HOST_ARCH)
 	dh_auto_install --builddirectory=$(DEB_BUILDDIR)
-	cp -r debian/local/usr_amd64/usr $(debian-tmp)/
+# fixes from build.mk
+	# Install the Python pretty printers
+	mkdir -p $(CURDIR)/$(debian-tmp)/usr/share/gdb/auto-load/$(slibdir)
+	perl -pe 'BEGIN {undef $$/; open(IN, "$(DEB_BUILDDIR)/nptl/nptl_lock_constants.py"); $$j=<IN>;} s/from nptl_lock_constants import \*/$$j/g;' \
+		$(CURDIR)/nptl/nptl-printers.py > $(CURDIR)/$(debian-tmp)/usr/share/gdb/auto-load/$(slibdir)/libc.so.6-gdb.py
+	# Install an empty libpthread_nonshared.a to support broken closed
+	# source software.
+	ar crv $(CURDIR)/$(debian-tmp)/$(libdir)/libpthread_nonshared.a
+	#
 	mkdir -p $(debian-tmp)/etc/ld.so.conf.d
 	touch "$(debian-tmp)/etc/ld.so.conf.d/x86_64-linux-gnu.conf"
 	printf "# Multiarch support\n/usr/local/lib/x86_64-linux-gnu\n/lib/x86_64-linux-gnu\n/usr/lib/x86_64-linux-gnu" | tee "$(debian-tmp)/etc/ld.so.conf.d/x86_64-linux-gnu.conf" > /dev/null
 	mkdir -p "$(debian-tmp)/var/cache/ldconfig"
 	mkdir -p "$(debian-tmp)/lib64"
 	ln -sf /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 "$(debian-tmp)/lib64/ld-linux-x86-64.so.2" 
-	#
-	# libc6-i386:amd64
+	# Create the multiarch include directories
+	mkdir -p $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mv $(debian-tmp)/usr/include/bits $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mv $(debian-tmp)/usr/include/gnu $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mv $(debian-tmp)/usr/include/sys $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mv $(debian-tmp)/usr/include/fpu_control.h $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mv $(debian-tmp)/usr/include/a.out.h $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mv $(debian-tmp)/usr/include/ieee754.h $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mkdir -p $(debian-tmp)/usr/include/finclude/$(DEB_HOST_MULTIARCH)
+	mv $(debian-tmp)/usr/include/finclude/math-vector-fortran.h $(debian-tmp)/usr/include/finclude/$(DEB_HOST_MULTIARCH)
+	# Generate gconv-modules.cache
+	$(ICONVCONFIG) --nostdlib --prefix=$(CURDIR)/$(debian-tmp) -o $(CURDIR)/$(debian-tmp)/$(libdir)/gconv/gconv-modules.cache
+	# Generate the list of SUPPORTED locales on main tmp
+	$(MAKE) -f debian/generate-supported.mk IN=localedata/SUPPORTED OUT=$(debian-tmp)/usr/share/i18n/SUPPORTED
+# libc6-i386:amd64
 	dh_auto_install --builddirectory=$(DEB_BUILDDIR_i386)
-	cp -r debian/local/usr_lib32/usr $(debian-tmp-i386)/
+	# Install the Python pretty printers
+	mkdir -p $(CURDIR)/$(debian-tmp-i386)/usr/share/gdb/auto-load/lib32
+	perl -pe 'BEGIN {undef $$/; open(IN, "$(DEB_BUILDDIR_i386)/nptl/nptl_lock_constants.py"); $$j=<IN>;} s/from nptl_lock_constants import \*/$$j/g;' \
+		$(CURDIR)/nptl/nptl-printers.py > $(CURDIR)/$(debian-tmp-i386)/usr/share/gdb/auto-load/lib32/libc.so.6-gdb.py
+	# Install an empty libpthread_nonshared.a to support broken closed
+	# source software.
+	ar crv $(CURDIR)/$(debian-tmp-i386)/usr/lib32/libpthread_nonshared.a
+	#
 	rm -r $(debian-tmp-i386)/etc/ld.so.cache
 	mkdir -p $(debian-tmp-i386)/etc/ld.so.conf.d
 	touch "$(debian-tmp-i386)/etc/ld.so.conf.d/zz_i386-biarch-compat.conf"
 	printf "# Legacy biarch compatibility support\n/lib32\n/usr/lib32" | tee "$(debian-tmp-i386)/etc/ld.so.conf.d/zz_i386-biarch-compat.conf" > /dev/null
-	## libc6-x32:amd64
+	mkdir -p "$(debian-tmp-i386)/var/cache/ldconfig
+	# Generate gconv-modules.cache
+	$(ICONVCONFIG) --nostdlib --prefix=$(CURDIR)/$(debian-tmp-i386) -o $(CURDIR)/$(debian-tmp-i386)/usr/lib32/gconv/gconv-modules.cache
+## libc6-x32:amd64
 	#dh_auto_install --builddirectory=$(DEB_BUILDDIR_x32)
 endif
+# source
 
+# Make sure to use the just built iconvconfig for native builds. When
+# cross-compiling use the system iconvconfig. A cross-specific
+# build-dependency makes sure that the correct version is used, as
+# the format might change between upstream versions.
+ifeq ($(DEB_BUILD_ARCH),$(DEB_HOST_ARCH))
+ICONVCONFIG = $(CURDIR)/$(DEB_BUILDDIRLIBC)/elf/ld.so --library-path $(CURDIR)/$(DEB_BUILDDIRLIBC) \
+	      $(CURDIR)/$(DEB_BUILDDIRLIBC)/iconv/iconvconfig
+else
+ICONVCONFIG = /usr/sbin/iconvconfig
+endif
+#
+# Make sure to use the just built localedef for native builds. When
+# cross-compiling use the system localedef passing --little-endian
+# or --big-endian to select the correct endianess. A cross-specific
+# build-dependency makes sure that the correct version is used, as
+# the format might change between upstream versions.
+#
+ifeq ($(DEB_BUILD_ARCH),$(DEB_HOST_ARCH))
+LOCALEDEF = I18NPATH=$(CURDIR)/localedata \
+	    GCONV_PATH=$(CURDIR)/$(DEB_BUILDDIRLIBC)/iconvdata \
+	    LC_ALL=C \
+	    $(CURDIR)/$(DEB_BUILDDIRLIBC)/elf/ld.so --library-path $(CURDIR)/$(DEB_BUILDDIRLIBC) \
+	    $(CURDIR)/$(DEB_BUILDDIRLIBC)/locale/localedef
+else
+LOCALEDEF = I18NPATH=$(CURDIR)/localedata \
+	    GCONV_PATH=$(CURDIR)/$(DEB_BUILDDIRLIBC)/iconvdata \
+	    LC_ALL=C \
+	    localedef --$(DEB_HOST_ARCH_ENDIAN)-endian
+endif
+#
+	$(LOCALEDEF) --quiet -c -f UTF-8 -i C $(CURDIR)/build-tree/C.utf8
+#
+	$(MAKE) -C $(DEB_BUILDDIRLIBC) $(NJOBS) \
+		objdir=$(DEB_BUILDDIRLIBC) \
+		install_root=$(CURDIR)/build-tree/locales-all \
+		localedata/install-locale-files LOCALEDEF="$(LOCALEDEF)"
+	# Remove the C.utf8 locale to avoid conflicts with the one in libc-bin
+	rm -fr $(CURDIR)/build-tree/locales-all/usr/lib/locale/C.utf8
+	rdfind -outputname /dev/null -makesymlinks true -removeidentinode false \
+		$(CURDIR)/build-tree/locales-all/usr/lib/locale
+	symlinks -r -s -c $(CURDIR)/build-tree/locales-all/usr/lib/locale
 
 
 
