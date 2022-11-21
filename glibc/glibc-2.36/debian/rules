@@ -358,7 +358,7 @@ endif
 	symlinks -r -s -c $(CURDIR)/build-tree/locales-all/usr/lib/locale
 
 override_dh_installdocs:
-	dh_installdocs --doc-main-package=glibc-doc
+	for i in $(dh_listpackages); do dh_installdocs --doc-main-package=glibc-doc -p$i; done
 
 
 
