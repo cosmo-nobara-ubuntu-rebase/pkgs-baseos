@@ -18,5 +18,4 @@ usr/lib/pt_chown
 usr/sbin/iconvconfig
 usr/bin/zdump
 usr/sbin/zic
-var/cache/ldconfig
 ${env:build-tree}/C.utf8 usr/lib/locale

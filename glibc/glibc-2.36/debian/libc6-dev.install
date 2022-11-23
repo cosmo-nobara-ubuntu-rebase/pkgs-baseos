@@ -1,7 +1,6 @@
 usr/include
 usr/lib/*/*.o
 usr/lib/*/*.so
-usr/lib/*/audit
 usr/lib/*/libBrokenLocale.a
 usr/lib/*/libanl.a
 usr/lib/*/libc.a

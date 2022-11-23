@@ -2,4 +2,6 @@ etc/ld.so.conf.d
 lib*/ld*.so*
 lib/*/*.so*
 usr/lib/*/gconv
+usr/lib/*/audit
 usr/lib/getconf/*
+var/cache/ldconfig
