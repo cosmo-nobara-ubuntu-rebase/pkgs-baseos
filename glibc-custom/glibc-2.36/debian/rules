@@ -223,8 +223,8 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 	echo -n "Build started: " ; date --rfc-2822; \
 	echo "---------------"; \
 	cd $(DEB_BUILDDIR_i386) && \
-		CC=gcc -m32 \
-		CXX=g++ -m32 \
+		CC="gcc -m32" \
+		CXX="g++ -m32" \
 		AUTOCONF=false \
 		MAKEINFO=: \
 		$(CURDIR)/configure \
@@ -355,12 +355,12 @@ ifeq (i386,$(DEB_HOST_ARCH))
 	echo -n "Build started: " ; date --rfc-2822; \
 	echo "---------------"; \
 	cd $(DEB_BUILDDIR_amd64) && \
-		CC=gcc -m64 \
-		CXX=g++ -m64 \
+		CC="gcc -m64" \
+		CXX="g++ -m64" \
 		AUTOCONF=false \
 		MAKEINFO=: \
 		$(CURDIR)/configure \
-		--build=i686-pc-linux-gnu \
+		--build=x86_64-linux-gnu \
 		--prefix=/usr \
 		--enable-add-ons=$(standard-add-ons)"$(add-ons)" \
 		--enable-stackguard-randomization \
