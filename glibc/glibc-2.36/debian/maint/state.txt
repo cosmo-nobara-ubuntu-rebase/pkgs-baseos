@@ -1,0 +1,153 @@
+YES
+# If I understand correctly, without this anyone using gcc 13 with the specific options will get warnings when including that header. If so, I think it's worth including.
+FirstPatch: 0001-stdlib-Suppress-gcc-diagnostic-that-char8_t-is-a-key.patch
+c3fda489cfdb2260f9fec706e6fd7259858c4467 stdlib: Suppress gcc diagnostic that char8_t is a keyword in C++20 in uchar.h.
+
+YES
+FirstPatch: 0002-dlfcn-Pass-caller-pointer-to-static-dlopen-implement.patch
+c74bb93cfdb04d49155b0e30983a3c866167bbca dlfcn: Pass caller pointer to static dlopen implementation (bug 29446)
+
+YES
+# 5.19 is currently in -proposed
+FirstPatch: 0003-Update-syscall-lists-for-Linux-5.19.patch
+ac47d8f6cf9744139adb12f540fb9cc610cac579 Update syscall lists for Linux 5.19
+
+YES
+FirstPatch: 0004-Linux-Terminate-subprocess-on-late-failure-in-tst-pi.patch
+e982657073c4db21459ffd9e17bc505b1d64b876 Linux: Terminate subprocess on late failure in tst-pidfd (bug 29485)
+
+YES
+FirstPatch: 0005-alpha-Fix-generic-brk-system-call-emulation-in-__brk.patch
+8b139cd4f1074ae0d95d9bff60db283a1ed72734 alpha: Fix generic brk system call emulation in __brk_call (bug 29490)
+
+YES
+FirstPatch: 0006-socket-Check-lengths-before-advancing-pointer-in-CMS.patch
+d13a7a6f100576b1e30dc044b2e0c4cbcb6196f6 socket: Check lengths before advancing pointer in CMSG_NXTHDR
+
+YES
+FirstPatch: 0007-NEWS-Add-entry-for-bug-28846.patch
+5c62874f423af93e97b51bc9a57af228a546156f NEWS: Add entry for bug 28846
+
+YES
+FirstPatch: 0008-01-glibcextract.py-Add-compile_c_snippet.patch
+0062e7dd1c3674ece2daca53a898badd28b60421 glibcextract.py: Add compile_c_snippet
+1cc5513114e76083669cba1b11252aad35525e69 linux: Use compile_c_snippet to check linux/pidfd.h availability
+4dad97e2a2e510c6b53a0add29a2188714fcf4ab linux: Mimic kernel defition for BLOCK_SIZE
+d48813227b63a0d92ea357ea0733229ed74e31ab linux: Use compile_c_snippet to check linux/mount.h availability
+bb1e8b0ca99b5cbedfae3e6245528a87d95ff3e2 linux: Fix sys/mount.h usage with kernel headers
+3bd3c612e98a53ce60ed972f5cd2b90628b3cba5 Linux: Fix enum fsconfig_command detection in <sys/mount.h>
+
+YES
+FirstPatch: 0009-syslog-Fix-large-messages-BZ-29536.patch
+b0e7888d1fa2dbd2d9e1645ec8c796abf78880b9 syslog: Fix large messages (BZ#29536)
+
+YES
+FirstPatch: 0010-elf-Call-__libc_early_init-for-reused-namespaces-bug.patch
+924e4f3eaa502ce82fccf8537f021a796d158771 elf: Call __libc_early_init for reused namespaces (bug 29528)
+
+YES
+FirstPatch: 0011-Apply-asm-redirections-in-wchar.h-before-first-use.patch
+3c791f2031ca8f6b99e96b774ed1c505ceb93595 Apply asm redirections in wchar.h before first use
+
+YES
+FirstPatch: 0012-elf-Restore-how-vDSO-dependency-is-printed-with-LD_T.patch
+b3736d1a3c60a3ec9959bf3b38794958546bf6a2 elf: Restore how vDSO dependency is printed with LD_TRACE_LOADED_OBJECTS (BZ #29539)
+
+YES
+FirstPatch: 0013-syslog-Remove-extra-whitespace-between-timestamp-and.patch
+645d94808aaa90fb1b20a25ff70bb50d9eb1d55b syslog: Remove extra whitespace between timestamp and message (BZ#29544)
+
+YES
+FirstPatch: 0014-Add-NEWS-entry-for-CVE-2022-39046.patch
+b46412fb17e8bfc6c9e1f144bbcf833320c80f8a Add NEWS entry for CVE-2022-39046
+
+YES
+FirstPatch: 0015-nscd-Fix-netlink-cache-invalidation-if-epoll-is-used.patch
+c399271c10bd00714504e8d4dfbec8aebf996dd4 nscd: Fix netlink cache invalidation if epoll is used [BZ #29415]
+
+YES
+FirstPatch: 0016-01-resolv-Add-tst-resolv-byaddr-for-testing-reverse-loo.patch
+9d7eebde8f134ea25bdb9ab61bc74d5e71e41288 resolv: Add tst-resolv-byaddr for testing reverse lookup
+bffc33e90ed57a4786c676dda92d935e3613e031 resolv: Add tst-resolv-aliases
+3c9b4004e2dccc9ca2ace078a0106f9d682fd1a0 resolv: Add internal __res_binary_hnok function
+20ec40a51d3a8e9487f40dc9352d158def23ea8c resolv: Add the __ns_samebinaryname function
+adb69f8ffe83db5d475868b42996bc70de8cff77 resolv: Add internal __ns_name_length_uncompressed function
+f0e9657067240b8b105c6d58d5da9dc926f2f0ed resolv: Add DNS packet parsing helpers geared towards wire format
+b714ab7e3ce999b79401cdd22291128a7fd6d8ef nss_dns: Split getanswer_ptr from getanswer_r
+77f523c473878ec0051582ef15161c6982879095 nss_dns: Rewrite _nss_dns_gethostbyaddr2_r and getanswer_ptr
+5165080fec63a1f03aa1985b77bca300465bf570 nss_dns: Remove remnants of IPv6 address mapping
+78c8ef21fa54e994451d5b42ead6080d99a88a49 nss_dns: Rewrite getanswer_r to match getanswer_ptr (bug 12154, bug 29305)
+7a236dc44a22dc4252e803d1ee1d3b970ec43805 nss_dns: In gaih_getanswer_slice, skip strange aliases (bug 12154)
+e2ec6a8db38a6b734bbdb41e498fdc9460f7566a resolv: Add new tst-resolv-invalid-cname
+c5cdb39c20e96d9ac0d46fc7284b8276a537fd35 nss_dns: Rewrite _nss_dns_gethostbyname4_r using current interfaces
+a7fa604f3050a1024dc8ec28ff28bad811f6151f resolv: Fix building tst-resolv-invalid-cname for earlier C standards
+
+YES
+FirstPatch: 0017-NEWS-Note-bug-12154-and-bug-29305-as-fixed.patch
+5d885617cec5713fdde42177398fe98acb66b7a2 NEWS: Note bug 12154 and bug 29305 as fixed
+
+YES
+FirstPatch: 0018-elf-Run-tst-audit-tlsdesc-tst-audit-tlsdesc-dlopen-e.patch
+df51334828f2af214105aad82042140ee3a6de0a elf: Run tst-audit-tlsdesc, tst-audit-tlsdesc-dlopen everywhere
+
+YES
+FirstPatch: 0019-elf-Fix-hwcaps-string-size-overestimation.patch
+4b95b6e8bbb5a2b6856f707bf3bc3308ebef595a elf: Fix hwcaps string size overestimation
+
+YES
+# Dependencies for the next patch ( https://sourceware.org/bugzilla/show_bug.cgi?id=28937 )
+FirstPatch: 0020-01-scripts-dso-ordering-test.py-Generate-program-run-ti.patch
+7a3f8c8a7aeb41d4bbfeec07d0be1e92c3019919 scripts/dso-ordering-test.py: Generate program run-time dependencies
+d1241cf00139733de069c84933cd576dc1a1f45e elf: Rename _dl_sort_maps parameter from skip to force_first
+
+YES
+FirstPatch: 0021-elf-Implement-force_first-handling-in-_dl_sort_maps_.patch
+da5f134f6d59701a3a6119309ae91c93c3fa5b51 elf: Implement force_first handling in _dl_sort_maps_dfs (bug 28937)
+
+YES
+# We want this one for armhf I guess?
+FirstPatch: 0022-gconv-Use-64-bit-interfaces-in-gconv_parseconfdir-bu.patch
+52c037f3574eb9062b111d78a4cbeb79681d07d3 gconv: Use 64-bit interfaces in gconv_parseconfdir (bug 29583)
+
+YES
+FirstPatch: 0023-01-x86-include-BMI1-and-BMI2-in-x86-64-v3-level.patch
+18bec23cbb4d530a2a8ce95353770661fabcd55f x86: include BMI1 and BMI2 in x86-64-v3 level
+46479e5d10ed87825aa277da158d6a687974518b x86-64: Require BMI2 for AVX2 str(n)casecmp implementations
+7afbd1e56acb721031bffd876f275dcb1af7e530 x86-64: Require BMI2 for AVX2 strcmp implementation
+29c577e0f54fe6e70ceacb3659179781c5569903 x86-64: Require BMI2 for AVX2 strncmp implementation
+d8bf4388df679fa5a3ae7889a649e573e3124530 x86-64: Require BMI2 for AVX2 wcs(n)cmp implementations
+d9196d4f3fa9997388655813ddd236426a16dd92 x86-64: Require BMI2 for AVX2 (raw|w)memchr implementations
+923c3f3c373f499e62160e00831dda576443317b x86-64: Require BMI2 and LZCNT for AVX2 memrchr implementation
+2d8ef784bd6a784496a6fd460de6b6f57c70a501 x86-64: Require BMI1/BMI2 for AVX2 strrchr and wcsrchr implementations
+
+YES
+# needed because we included the faulty rewrite in our patchset
+FirstPatch: 0024-nscd-Drop-local-address-tuple-variable-BZ-29607.patch
+2bd815d8347851212b9a91dbdca8053f4dbdac87 nscd: Drop local address tuple variable [BZ #29607]
+
+YES
+# This one worries me because of the comments in https://sourceware.org/bugzilla/show_bug.cgi?id=29605 saying that it breaks stuff with the resolver rewrite, which we included.
+FirstPatch: 0025-get_nscd_addresses-Fix-subscript-typos-BZ-29605.patch
+227c9035872fc9e9e2cf56ec8f89219747ee19bc get_nscd_addresses: Fix subscript typos [BZ #29605]
+
+YES
+# Do we care about Trusty ? get_random() syscall is available on newer releases
+FirstPatch: 0026-stdlib-Fix-__getrandom_nocancel-type-and-arc4random-.patch
+76e05613ee28f4ac4a0ab97effc32e0e78e37a56 stdlib: Fix __getrandom_nocancel type and arc4random usage (BZ #29638)
+
+NO
+# We don't seem to hit this particular issue?
+33f1b4c1452b33991e670f636ebe98b90a405e10 wcsmbs: Add missing test-c8rtomb/test-mbrtoc8 dependency
+
+NO
+302bc33bc53c787da6e74162a7092e9c0fb964a8 elf: Replace `strcpy` call with `memcpy` [BZ #29454]
+
+NO
+2628500f5dff1dd99c49a09b418b3b1ea3a6b5d3 m68k: Enforce 4-byte alignment on internal locks (BZ #29537)
+
+NO
+d1d8379bff34f02f86f82db2cef5bf66746d3560 hppa: Fix initialization of dp register [BZ 29635]
+
+NO
+cdc496eb55e30f8f2461bedb0a7381c0a7a3d3ae hppa: undef __ASSUME_SET_ROBUST_LIST
+
