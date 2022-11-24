@@ -1,0 +1,2 @@
+# original source with patch from https://github.com/Frogging-Family/glibc-eac/blob/main/rogue_company_reverts.patch (quilt breaks this patch)
+glibc_2.36.rc.orig.tar.xz
