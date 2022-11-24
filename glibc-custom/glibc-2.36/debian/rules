@@ -299,9 +299,9 @@ ifeq (i386,$(DEB_HOST_ARCH))
 	echo "MIG=$(MIG)" >> $(DEB_BUILDDIR)/configparms
 	echo "BUILD_CC=$(BUILD_CC)" >> $(DEB_BUILDDIR)/configparms
 	echo "BUILD_CXX=$(BUILD_CXX)"  >> $(DEB_BUILDDIR)/configparms
-	echo "CFLAGS=$(HOST_CFLAGS) -mno-tls-direct-seg-refs" >> $(DEB_BUILDDIR)/configparms
-	echo "ASFLAGS=$(HOST_CFLAGS) -mno-tls-direct-seg-refs"  >> $(DEB_BUILDDIR)/configparms
-	echo "BUILD_CFLAGS=$(BUILD_CFLAGS) -mno-tls-direct-seg-refs" >> $(DEB_BUILDDIR)/configparms
+	echo "CFLAGS=$(HOST_CFLAGS)  -lm -mno-tls-direct-seg-refs" >> $(DEB_BUILDDIR)/configparms
+	echo "ASFLAGS=$(HOST_CFLAGS)  -lm -mno-tls-direct-seg-refs"  >> $(DEB_BUILDDIR)/configparms
+	echo "BUILD_CFLAGS=$(BUILD_CFLAGS)  -lm -mno-tls-direct-seg-refs" >> $(DEB_BUILDDIR)/configparms
 	#
 	echo -n "Build started: " ; date --rfc-2822; \
 	echo "---------------"; \
@@ -324,7 +324,7 @@ ifeq (i386,$(DEB_HOST_ARCH))
 		--enable-static-pie \
 		--enable-multi-arch \
 		--enable-cet \
-		$(with_headers) $(extra_config_options)  --disable-mathvec
+		$(with_headers) $(extra_config_options)
 	@echo Building $(curpass):i386
 	$(MAKE) -C $(DEB_BUILDDIR) $(NJOBS)
 	echo "---------------"
@@ -364,7 +364,7 @@ ifeq (i386,$(DEB_HOST_ARCH))
 		--enable-static-pie \
 		--enable-multi-arch \
 		--enable-cet \
-		$(with_headers) $(extra_config_options)   --disable-mathvec
+		$(with_headers) $(extra_config_options)
 	@echo Building $(curpass)-amd64:i386
 	$(MAKE) cross-compiling=yes -C $(DEB_BUILDDIR_amd64) $(NJOBS) install_root=$(CURDIR)/$(debian-tmp-amd64)  install-bootstrap-headers=yes install-headers
 	echo "---------------"
@@ -489,8 +489,71 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 	#dh_auto_install --builddirectory=$(DEB_BUILDDIR_x32)
 endif
 ifeq (i386,$(DEB_HOST_ARCH))
+# libc6:$(DEB_HOST_ARCH)
 	dh_auto_install --builddirectory=$(DEB_BUILDDIR)
+# fixes from build.mk
+	# Install the Python pretty printers
+	mkdir -p $(CURDIR)/$(debian-tmp)/usr/share/gdb/auto-load/$(slibdir)
+	perl -pe 'BEGIN {undef $$/; open(IN, "$(DEB_BUILDDIR)/nptl/nptl_lock_constants.py"); $$j=<IN>;} s/from nptl_lock_constants import \*/$$j/g;' $(CURDIR)/nptl/nptl-printers.py > $(CURDIR)/$(debian-tmp)/usr/share/gdb/auto-load/$(slibdir)/libc.so.6-gdb.py
+	# Install an empty libpthread_nonshared.a to support broken closed
+	# source software.
+	ar crv $(CURDIR)/$(debian-tmp)/$(libdir)/libpthread_nonshared.a
+	#
+	mkdir -p $(debian-tmp)/etc/ld.so.conf.d
+	touch "$(debian-tmp)/etc/ld.so.conf.d/i386-linux-gnu.conf"
+	printf "# Multiarch support\n/usr/local/lib/i386-linux-gnu\n/lib/i386-linux-gnu\n/usr/lib/i386-linux-gnu\n/usr/local/lib/i686-linux-gnu\n/lib/i686-linux-gnu\n/usr/lib/i686-linux-gnu" | tee "$(debian-tmp)/etc/ld.so.conf.d/i386-linux-gnu.conf" > /dev/null
+	mkdir -p "$(debian-tmp)/var/cache/ldconfig"
+	# Create the multiarch include directories
+	mkdir -p $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mv $(debian-tmp)/usr/include/bits $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mv $(debian-tmp)/usr/include/gnu $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mv $(debian-tmp)/usr/include/sys $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mv $(debian-tmp)/usr/include/fpu_control.h $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mv $(debian-tmp)/usr/include/a.out.h $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mv $(debian-tmp)/usr/include/ieee754.h $(debian-tmp)/usr/include/$(DEB_HOST_MULTIARCH)
+	mkdir -p $(debian-tmp)/usr/include/finclude/$(DEB_HOST_MULTIARCH)
+	# Get rid of un-needed files
+	rm -rf $(debian-tmp)/etc/ld.so.cache || echo "un-needed file not found!"
+	rm -rf $(debian-tmp)/etc/rpc || echo "un-needed file not found!"
+	rm -rf $(debian-tmp)/var/lib/misc/Makefile || echo "un-needed file not found!"
+	rm -rf $(debian-tmp)/sbin/sln || echo "un-needed file not found!"
+	rm -rf $(debian-tmp)/usr/bin/makedb || echo "un-needed file not found!"
+	rm -rf $(debian-tmp)/usr/bin/pcprofiledump || echo "un-needed file not found!"
+	rm -rf $(debian-tmp)/usr/bin/xtrace || echo "un-needed file not found!"
+	rm -rf $(debian-tmp)/var/lib/misc/Makefile  || echo "un-needed file not found!"
+	# Generate gconv-modules.cache
+	$(DEB_BUILDDIR)/elf/ld.so --library-path $(DEB_BUILDDIR) $(DEB_BUILDDIR)/iconv/iconvconfig  --prefix=$(CURDIR)/$(debian-tmp) -o $(CURDIR)/$(debian-tmp)/$(libdir)/gconv/gconv-modules.cache
+	# Generate the list of SUPPORTED locales on main tmp
+	$(MAKE) -f debian/generate-supported.mk IN=localedata/SUPPORTED OUT=$(debian-tmp)/usr/share/i18n/SUPPORTED
+	# Remove un-installable files
+	rm -rf $(debian-tmp)/usr/share/locale/*/LC_MESSAGES/libc.mo
+# libc6-amd64:i386
 	dh_auto_install --builddirectory=$(DEB_BUILDDIR_amd64)
+	# Install the Python pretty printers
+	mkdir -p $(CURDIR)/$(debian-tmp-amd64)/usr/share/gdb/auto-load/lib32
+	perl -pe 'BEGIN {undef $$/; open(IN, "$(DEB_BUILDDIR_amd64)/nptl/nptl_lock_constants.py"); $$j=<IN>;} s/from nptl_lock_constants import \*/$$j/g;' $(CURDIR)/nptl/nptl-printers.py > $(CURDIR)/$(debian-tmp-amd64)/usr/share/gdb/auto-load/lib32/libc.so.6-gdb.py
+	# Install an empty libpthread_nonshared.a to support broken closed
+	# source software.
+	ar crv $(CURDIR)/$(debian-tmp-amd64)/usr/lib32/libpthread_nonshared.a
+	#
+	rm -r $(debian-tmp-amd64)/etc/ld.so.cache
+	mkdir -p $(debian-tmp-amd64)/etc/ld.so.conf.d
+	touch "$(debian-tmp-amd64)/etc/ld.so.conf.d/zz_amd-biarch-compat.conf"
+	printf "# Legacy biarch compatibility support\n/lib32\n/usr/lib32" | tee "$(debian-tmp-amd64)/etc/ld.so.conf.d/zz_amd-biarch-compat.conf" > /dev/null
+	mkdir -p "$(debian-tmp-amd64)/var/cache/ldconfig"
+	# Get rid of un-needed files
+	/etc/ld.so.cache || echo "un-needed file not found!"
+	rm -rf $(debian-tmp-amd64)/etc/rpc || echo "un-needed file not found!"
+	rm -rf $(debian-tmp-amd64)/var/lib/misc/Makefile || echo "un-needed file not found!"
+	rm -rf $(debian-tmp-amd64)/sbin/sln || echo "un-needed file not found!"
+	rm -rf $(debian-tmp-amd64)/usr/bin/makedb || echo "un-needed file not found!"
+	rm -rf $(debian-tmp-amd64)/usr/bin/pcprofiledump || echo "un-needed file not found!"
+	rm -rf $(debian-tmp-amd64)/usr/bin/xtrace || echo "un-needed file not found!"
+	rm -rf $(debian-tmp-amd64)/var/lib/misc/Makefile  || echo "un-needed file not found!"
+	# Generate gconv-modules.cache
+	$(DEB_BUILDDIR_amd64)/elf/ld.so --library-path $(DEB_BUILDDIR_amd64) $(DEB_BUILDDIR_amd64)/iconv/iconvconfig --prefix=$(CURDIR)/$(debian-tmp-amd64) -o $(CURDIR)/$(debian-tmp-amd64)/usr/lib64/gconv/gconv-modules.cache
+	# Remove un-installable files
+	rm -rf $(debian-tmp-amd64)/usr/share/locale/*/LC_MESSAGES/libc.mo
 endif
 # source
 	$(LOCALEDEF) --quiet -c -f UTF-8 -i C $(CURDIR)/build-tree/C.utf8
@@ -530,6 +593,26 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 	cp -rf $(debian-tmp-i386)/usr/share/gdb debian/libc6-dev-i386/usr/share/
 endif
 ifeq (i386,$(DEB_HOST_ARCH))
+	# libc6-amd64
+	mkdir -p debian/libc6-amd64
+	mkdir -p debian/libc6-amd64/usr
+	mkdir -p debian/libc6-amd64/usr/lib64
+	cp -rf $(debian-tmp-amd64)/etc debian/libc6-amd64/
+	cp -rf $(debian-tmp-amd64)/lib debian/libc6-amd64/
+	cp -rf $(debian-tmp-amd64)/lib64 debian/libc6-amd64/
+	cp -rf $(debian-tmp-amd64)/usr/lib64/audit debian/libc6-amd64/usr/lib64/
+	cp -rf $(debian-tmp-amd64)/usr/lib64/gconv debian/libc6-amd64/usr/lib64/
+	# libc6-dev-amd64
+	mkdir -p debian/libc6-dev-amd64
+	mkdir -p debian/libc6-dev-amd64/usr
+	mkdir -p debian/libc6-dev-amd64/usr/include/x86_64-linux-gnu/gnu/
+	mkdir -p debian/libc6-dev-amd64/usr/lib64
+	mkdir -p debian/libc6-dev-amd64/usr/share
+	cp -rf $(debian-tmp-amd64)/usr/include/gnu/stubs.h debian/libc6-dev-amd64/usr/include/x86_64-linux-gnu/gnu/stubs-64.h
+	cp -rf $(debian-tmp-amd64)/usr/include/gnu/lib-names.h debian/libc6-dev-amd64/usr/include/x86_64-linux-gnu/gnu/lib-names-64.h
+	cp -rf $(debian-tmp-amd64)/usr/lib64/*.so debian/libc6-dev-amd64/usr/lib64/
+	cp -rf $(debian-tmp-amd64)/usr/lib64/*.a debian/libc6-dev-amd64/usr/lib64/
+	cp -rf $(debian-tmp-amd64)/usr/lib64/*.o debian/libc6-dev-amd64/usr/lib64/
 endif
 
 override_dh_installdocs:
