@@ -181,6 +181,8 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 	echo -n "Build started: " ; date --rfc-2822; \
 	echo "---------------"; \
 	cd $(DEB_BUILDDIR) && \
+		CC=gcc \
+		CXX=g++ \
 		AUTOCONF=false \
 		MAKEINFO=: \
 		$(CURDIR)/configure \
@@ -221,6 +223,8 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 	echo -n "Build started: " ; date --rfc-2822; \
 	echo "---------------"; \
 	cd $(DEB_BUILDDIR_i386) && \
+		CC=gcc -m32 \
+		CXX=g++ -m32 \
 		AUTOCONF=false \
 		MAKEINFO=: \
 		$(CURDIR)/configure \
@@ -264,6 +268,8 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 #		CFLAGS="$(HOST_CFLAGS)  -mx32" \
 #		ASFLAGS="$(HOST_CFLAGS)  -mx32" \
 #		BUILD_CFLAGS="$(BUILD_CFLAGS)  -mx32" \
+#		CC=gcc \
+#		CXX=g++ \
 #		AUTOCONF=false \
 #		MAKEINFO=: \
 #		$(CURDIR)/configure \
@@ -306,6 +312,8 @@ ifeq (i386,$(DEB_HOST_ARCH))
 	echo -n "Build started: " ; date --rfc-2822; \
 	echo "---------------"; \
 	cd $(DEB_BUILDDIR) && \
+		CC=gcc \
+		CXX=g++ \
 		AUTOCONF=false \
 		MAKEINFO=: \
 		$(CURDIR)/configure \
@@ -347,6 +355,8 @@ ifeq (i386,$(DEB_HOST_ARCH))
 	echo -n "Build started: " ; date --rfc-2822; \
 	echo "---------------"; \
 	cd $(DEB_BUILDDIR_amd64) && \
+		CC=gcc -m64 \
+		CXX=g++ -m64 \
 		AUTOCONF=false \
 		MAKEINFO=: \
 		$(CURDIR)/configure \
@@ -390,6 +400,8 @@ ifeq (i386,$(DEB_HOST_ARCH))
 #		CFLAGS="$(HOST_CFLAGS)  -mx32" \
 #		ASFLAGS="$(HOST_CFLAGS)  -mx32" \
 #		BUILD_CFLAGS="$(BUILD_CFLAGS)  -mx32" \
+#		CC=gcc \
+#		CXX=g++ \
 #		AUTOCONF=false \
 #		MAKEINFO=: \
 #		$(CURDIR)/configure \
@@ -530,16 +542,16 @@ ifeq (i386,$(DEB_HOST_ARCH))
 # libc6-amd64:i386
 	dh_auto_install --builddirectory=$(DEB_BUILDDIR_amd64)
 	# Install the Python pretty printers
-	mkdir -p $(CURDIR)/$(debian-tmp-amd64)/usr/share/gdb/auto-load/lib32
-	perl -pe 'BEGIN {undef $$/; open(IN, "$(DEB_BUILDDIR_amd64)/nptl/nptl_lock_constants.py"); $$j=<IN>;} s/from nptl_lock_constants import \*/$$j/g;' $(CURDIR)/nptl/nptl-printers.py > $(CURDIR)/$(debian-tmp-amd64)/usr/share/gdb/auto-load/lib32/libc.so.6-gdb.py
+	mkdir -p $(CURDIR)/$(debian-tmp-amd64)/usr/share/gdb/auto-load/lib64
+	perl -pe 'BEGIN {undef $$/; open(IN, "$(DEB_BUILDDIR_amd64)/nptl/nptl_lock_constants.py"); $$j=<IN>;} s/from nptl_lock_constants import \*/$$j/g;' $(CURDIR)/nptl/nptl-printers.py > $(CURDIR)/$(debian-tmp-amd64)/usr/share/gdb/auto-load/lib64/libc.so.6-gdb.py
 	# Install an empty libpthread_nonshared.a to support broken closed
 	# source software.
-	ar crv $(CURDIR)/$(debian-tmp-amd64)/usr/lib32/libpthread_nonshared.a
+	ar crv $(CURDIR)/$(debian-tmp-amd64)/usr/lib64/libpthread_nonshared.a
 	#
 	rm -r $(debian-tmp-amd64)/etc/ld.so.cache
 	mkdir -p $(debian-tmp-amd64)/etc/ld.so.conf.d
-	touch "$(debian-tmp-amd64)/etc/ld.so.conf.d/zz_amd-biarch-compat.conf"
-	printf "# Legacy biarch compatibility support\n/lib32\n/usr/lib32" | tee "$(debian-tmp-amd64)/etc/ld.so.conf.d/zz_amd-biarch-compat.conf" > /dev/null
+	touch "$(debian-tmp-amd64)/etc/ld.so.conf.d/zz_amd64-biarch-compat.conf"
+	printf "# Legacy biarch compatibility support\n/lib64\n/usr/lib64" | tee "$(debian-tmp-amd64)/etc/ld.so.conf.d/zz_amd64-biarch-compat.conf" > /dev/null
 	mkdir -p "$(debian-tmp-amd64)/var/cache/ldconfig"
 	# Get rid of un-needed files
 	/etc/ld.so.cache || echo "un-needed file not found!"
