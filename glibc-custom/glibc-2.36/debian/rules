@@ -58,7 +58,7 @@ BUILD_CC = $(DEB_BUILD_GNU_TYPE)-$(BASE_CC)
 BUILD_CXX = $(DEB_BUILD_GNU_TYPE)-$(BASE_CXX)
 BUILD_CFLAGS = -O2 -g -fdebug-prefix-map=$(CURDIR)=.
 BUILD_MIG = $(DEB_BUILD_GNU_TYPE)-$(BASE_MIG)
-HOST_CFLAGS = -pipe -O2 -g -fdebug-prefix-map=$(CURDIR)=. $(extra_cflags)
+HOST_CFLAGS = -O2 -g -fdebug-prefix-map=$(CURDIR)=. $(extra_cflags)
 BASE_CC = gcc
 BASE_CXX = g++
 BASE_MIG = mig
@@ -93,7 +93,7 @@ rtlddir=/lib
 slibdir=/lib/$(DEB_HOST_MULTIARCH)
 libdir=/usr/lib/$(DEB_HOST_MULTIARCH)
 mvec = no
-with_headers = --with-headers=$(includedir) --disable-sanity-checks --enable-hacker-mode
+with_headers = --with-headers=$(includedir) --disable-sanity-checks --enable-hacker-mode 
 extra_config_options = --with-default-link
 
 # Make sure to use the just built localedef for native builds. When
@@ -196,7 +196,6 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 		--enable-pt_chown \
 		--disable-crypt \
 		--enable-kernel=3.2 \
-		--with-selinux \
 		--enable-static-pie \
 		--enable-multi-arch \
 		--enable-cet \
@@ -214,11 +213,11 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 	echo "build-programs=yes" >> $(DEB_BUILDDIR_i386)/configparms
 	echo "install_root = $(CURDIR)/$(debian-tmp-i386)" >> $(DEB_BUILDDIR_i386)/configparms
 	echo "MIG=$(MIG)" >> $(DEB_BUILDDIR_i386)/configparms
-	echo "BUILD_CC=$(BUILD_CC) -m32" >> $(DEB_BUILDDIR_i386)/configparms
-	echo "BUILD_CXX=$(BUILD_CXX) -m32"  >> $(DEB_BUILDDIR_i386)/configparms
-	echo "CFLAGS=$(HOST_CFLAGS) -march=i686" >> $(DEB_BUILDDIR_i386)/configparms
-	echo "ASFLAGS=$(HOST_CFLAGS) -march=i686"  >> $(DEB_BUILDDIR_i386)/configparms
-	echo "BUILD_CFLAGS=$(BUILD_CFLAGS) -march=i686" >> $(DEB_BUILDDIR_i386)/configparms
+	echo "BUILD_CC=$(BUILD_CC)" >> $(DEB_BUILDDIR_i386)/configparms
+	echo "BUILD_CXX=$(BUILD_CXX)"  >> $(DEB_BUILDDIR_i386)/configparms
+	echo "CFLAGS=$(HOST_CFLAGS) -march=i686 -m32 -lm" >> $(DEB_BUILDDIR_i386)/configparms
+	echo "ASFLAGS=$(HOST_CFLAGS) -march=i686 -m32 -lm"  >> $(DEB_BUILDDIR_i386)/configparms
+	echo "BUILD_CFLAGS=$(BUILD_CFLAGS) -march=i686 -m32 -lm" >> $(DEB_BUILDDIR_i386)/configparms
 	#
 	echo -n "Build started: " ; date --rfc-2822; \
 	echo "---------------"; \
@@ -238,13 +237,12 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 		--with-timeoutfactor="$(TIMEOUTFACTOR)" \
 		--disable-crypt \
 		--enable-kernel=3.2 \
-		--with-selinux \
 		--enable-static-pie \
 		--enable-multi-arch \
 		--enable-cet \
 		$(with_headers) $(extra_config_options)
 	@echo Building $(curpass)-i386:amd64
-	$(MAKE) cross-compiling=yes -C $(DEB_BUILDDIR_i386) $(NJOBS) install_root=$(CURDIR)/$(debian-tmp-i386)  install-bootstrap-headers=yes install-headers
+	$(MAKE) cross-compiling=yes -C $(DEB_BUILDDIR_i386) $(NJOBS) csu/subdir_lib
 	echo "---------------"
 	echo -n "Build ended: " ; date --rfc-2822
 	cd ../../
@@ -346,11 +344,11 @@ ifeq (i386,$(DEB_HOST_ARCH))
 	echo "build-programs=yes" >> $(DEB_BUILDDIR_amd64)/configparms
 	echo "install_root = $(CURDIR)/$(debian-tmp-amd64)" >> $(DEB_BUILDDIR_amd64)/configparms
 	echo "MIG=$(MIG)" >> $(DEB_BUILDDIR_amd64)/configparms
-	echo "BUILD_CC=$(BUILD_CC) -m64" >> $(DEB_BUILDDIR_amd64)/configparms
-	echo "BUILD_CXX=$(BUILD_CXX) -m64"  >> $(DEB_BUILDDIR_amd64)/configparms
-	echo "CFLAGS=$(HOST_CFLAGS)" >> $(DEB_BUILDDIR_amd64)/configparms
-	echo "ASFLAGS=$(HOST_CFLAGS)"  >> $(DEB_BUILDDIR_amd64)/configparms
-	echo "BUILD_CFLAGS=$(BUILD_CFLAGS)" >> $(DEB_BUILDDIR_amd64)/configparms
+	echo "BUILD_CC=$(BUILD_CC)"  >> $(DEB_BUILDDIR_amd64)/configparms
+	echo "BUILD_CXX=$(BUILD_CXX)"  >> $(DEB_BUILDDIR_amd64)/configparms
+	echo "CFLAGS=$(HOST_CFLAGS) -m64 -lm" >> $(DEB_BUILDDIR_amd64)/configparms
+	echo "ASFLAGS=$(HOST_CFLAGS) -m64 -lm"  >> $(DEB_BUILDDIR_amd64)/configparms
+	echo "BUILD_CFLAGS=$(BUILD_CFLAGS) -m64 -lm" >> $(DEB_BUILDDIR_amd64)/configparms
 	#
 	echo -n "Build started: " ; date --rfc-2822; \
 	echo "---------------"; \
@@ -370,13 +368,13 @@ ifeq (i386,$(DEB_HOST_ARCH))
 		--with-timeoutfactor="$(TIMEOUTFACTOR)" \
 		--disable-crypt \
 		--enable-kernel=3.2 \
-		--with-selinux \
 		--enable-static-pie \
 		--enable-multi-arch \
 		--enable-cet \
-		$(with_headers) $(extra_config_options)
+		$(with_headers) $(extra_config_options) --disable-mathvec 
 	@echo Building $(curpass)-amd64:i386
-	$(MAKE) cross-compiling=yes -C $(DEB_BUILDDIR_amd64) $(NJOBS) install_root=$(CURDIR)/$(debian-tmp-amd64)  install-bootstrap-headers=yes install-headers
+	#$(MAKE) cross-compiling=yes -C $(DEB_BUILDDIR_amd64) $(NJOBS) install_root=$(CURDIR)/$(debian-tmp-amd64)  install-bootstrap-headers=yes install-headers
+	$(MAKE) cross-compiling=yes -C $(DEB_BUILDDIR_amd64) $(NJOBS) csu/subdir_lib
 	echo "---------------"
 	echo -n "Build ended: " ; date --rfc-2822
 	cd ../../
@@ -610,7 +608,6 @@ ifeq (i386,$(DEB_HOST_ARCH))
 	mkdir -p debian/libc6-amd64/usr
 	mkdir -p debian/libc6-amd64/usr/lib64
 	cp -rf $(debian-tmp-amd64)/etc debian/libc6-amd64/
-	cp -rf $(debian-tmp-amd64)/lib debian/libc6-amd64/
 	cp -rf $(debian-tmp-amd64)/lib64 debian/libc6-amd64/
 	cp -rf $(debian-tmp-amd64)/usr/lib64/audit debian/libc6-amd64/usr/lib64/
 	cp -rf $(debian-tmp-amd64)/usr/lib64/gconv debian/libc6-amd64/usr/lib64/
@@ -620,8 +617,8 @@ ifeq (i386,$(DEB_HOST_ARCH))
 	mkdir -p debian/libc6-dev-amd64/usr/include/x86_64-linux-gnu/gnu/
 	mkdir -p debian/libc6-dev-amd64/usr/lib64
 	mkdir -p debian/libc6-dev-amd64/usr/share
-	cp -rf $(debian-tmp-amd64)/usr/include/gnu/stubs.h debian/libc6-dev-amd64/usr/include/x86_64-linux-gnu/gnu/stubs-64.h
-	cp -rf $(debian-tmp-amd64)/usr/include/gnu/lib-names.h debian/libc6-dev-amd64/usr/include/x86_64-linux-gnu/gnu/lib-names-64.h
+	cp -rf $(debian-tmp-amd64)/usr/include/gnu/stubs-64.h debian/libc6-dev-amd64/usr/include/x86_64-linux-gnu/gnu/
+	cp -rf $(debian-tmp-amd64)/usr/include/gnu/lib-names-64.h debian/libc6-dev-amd64/usr/include/x86_64-linux-gnu/gnu/
 	cp -rf $(debian-tmp-amd64)/usr/lib64/*.so debian/libc6-dev-amd64/usr/lib64/
 	cp -rf $(debian-tmp-amd64)/usr/lib64/*.a debian/libc6-dev-amd64/usr/lib64/
 	cp -rf $(debian-tmp-amd64)/usr/lib64/*.o debian/libc6-dev-amd64/usr/lib64/
