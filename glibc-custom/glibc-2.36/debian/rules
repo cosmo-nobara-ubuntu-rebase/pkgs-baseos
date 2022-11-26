@@ -537,6 +537,7 @@ ifeq (i386,$(DEB_HOST_ARCH))
 	$(MAKE) -f debian/generate-supported.mk IN=localedata/SUPPORTED OUT=$(debian-tmp)/usr/share/i18n/SUPPORTED
 	# Remove un-installable files
 	rm -rf $(debian-tmp)/usr/share/locale/*/LC_MESSAGES/libc.mo
+	rm -rf $(debian-tmp)/usr/bin/lddlibc4
 # libc6-amd64:i386
 	dh_auto_install --builddirectory=$(DEB_BUILDDIR_amd64)
 	# Install the Python pretty printers
@@ -564,6 +565,7 @@ ifeq (i386,$(DEB_HOST_ARCH))
 	$(DEB_BUILDDIR_amd64)/elf/ld.so --library-path $(DEB_BUILDDIR_amd64) $(DEB_BUILDDIR_amd64)/iconv/iconvconfig --prefix=$(CURDIR)/$(debian-tmp-amd64) -o $(CURDIR)/$(debian-tmp-amd64)/usr/lib64/gconv/gconv-modules.cache
 	# Remove un-installable files
 	rm -rf $(debian-tmp-amd64)/usr/share/locale/*/LC_MESSAGES/libc.mo
+	rm -rf $(debian-tmp-amd64)/usr/bin/lddlibc4
 endif
 # source
 	$(LOCALEDEF) --quiet -c -f UTF-8 -i C $(CURDIR)/build-tree/C.utf8
