@@ -616,11 +616,11 @@ ifeq (i386,$(DEB_HOST_ARCH))
 	# libc6-dev-amd64
 	mkdir -p debian/libc6-dev-amd64
 	mkdir -p debian/libc6-dev-amd64/usr
-	mkdir -p debian/libc6-dev-amd64/usr/include/x86_64-linux-gnu/gnu/
+	mkdir -p debian/libc6-dev-amd64/usr/include/i386-linux-gnu/gnu/
 	mkdir -p debian/libc6-dev-amd64/usr/lib64
 	mkdir -p debian/libc6-dev-amd64/usr/share
-	cp -rf $(debian-tmp-amd64)/usr/include/gnu/stubs-64.h debian/libc6-dev-amd64/usr/include/x86_64-linux-gnu/gnu/
-	cp -rf $(debian-tmp-amd64)/usr/include/gnu/lib-names-64.h debian/libc6-dev-amd64/usr/include/x86_64-linux-gnu/gnu/
+	cp -rf $(debian-tmp-amd64)/usr/include/gnu/stubs-64.h debian/libc6-dev-amd64/usr/include/i386-linux-gnu/gnu/
+	cp -rf $(debian-tmp-amd64)/usr/include/gnu/lib-names-64.h debian/libc6-dev-amd64/usr/include/i386-linux-gnu/gnu/
 	cp -rf $(debian-tmp-amd64)/usr/lib64/*.so debian/libc6-dev-amd64/usr/lib64/
 	cp -rf $(debian-tmp-amd64)/usr/lib64/*.a debian/libc6-dev-amd64/usr/lib64/
 	cp -rf $(debian-tmp-amd64)/usr/lib64/*.o debian/libc6-dev-amd64/usr/lib64/
