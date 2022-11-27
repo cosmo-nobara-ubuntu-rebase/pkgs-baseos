@@ -21,7 +21,6 @@ GLIBC_BRANCH = release/$(DEB_VERSION_UPSTREAM)/master
 GLIBC_TAG = glibc-$(DEB_VERSION_UPSTREAM)
 GLIBC_CHECKOUT = glibc-checkout
 GLIBC_DIR = glibc-$(DEB_VERSION_UPSTREAM)
-DEB_ORIG = ../glibc_$(DEB_VERSION_UPSTREAM).orig.tar.xz
 GIT_UPDATES_DIFF = debian/patches/git-updates.diff
 
 # The minimum package version with which these packages are compatible.
@@ -157,8 +156,6 @@ override_dh_auto_configure:
 	echo "sbindir = $(sbindir)"               >> $(DEB_BUILDDIR)/configparms
 	echo "vardbdir = $(vardbdir)"             >> $(DEB_BUILDDIR)/configparms
 	echo "rtlddir = $(rtlddir)"       >> $(DEB_BUILDDIR)/configparms
-	# Generate glibc tarball in build-tree
-	cp $(DEB_ORIG) $(build-tree)/glibc-$(DEB_VERSION_UPSTREAM).tar.xz
 	# clone configrations
 	cp -rf $(DEB_BUILDDIR) $(DEB_BUILDDIR_i386)
 	cp -rf $(DEB_BUILDDIR) $(DEB_BUILDDIR_x32)
