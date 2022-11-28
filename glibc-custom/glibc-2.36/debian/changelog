@@ -1,4 +1,4 @@
-glibc (2.36.tkg.eac-99nobara21) kinetic; urgency=medium
+glibc (2.36.99nobara21) kinetic; urgency=medium
 
   * Experment with RC patches
 
