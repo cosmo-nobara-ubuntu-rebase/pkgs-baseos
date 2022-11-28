@@ -125,7 +125,6 @@ override_dh_clean:
 	rm -rf $(DEB_BUILDDIR_i386) 
 	rm -rf $(DEB_BUILDDIR_x32) 
 	rm -rf $(DEB_BUILDDIR_amd64)
-	rm -rf $(build-tree)/glibc-$(DEB_VERSION_UPSTREAM).tar.xz
 	rm -rf $(debian-tmp)
 	rm -rf $(debian-tmp-i386)
 	rm -rf $(debian-tmp-x32)
