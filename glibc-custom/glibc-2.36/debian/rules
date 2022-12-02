@@ -2,7 +2,6 @@
 
 # DEB options
 DEB_BUILD_OPTIONS=nocheck
-DEB_VERSION_UPSTREAM=2.36
 
 # Build tree vars
 curpass = libc
